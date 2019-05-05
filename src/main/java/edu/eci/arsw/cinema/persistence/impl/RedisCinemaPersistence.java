@@ -25,14 +25,15 @@ import org.springframework.stereotype.Service;
  */
 
 @Service
-public class InMemoryCinemaPersistence implements CinemaPersitence {
+public class RedisCinemaPersistence implements CinemaPersitence {
 
     @Autowired
     private Filter filter = null;
 
     private final ConcurrentHashMap<String, Cinema> cinemas = new ConcurrentHashMap<>();
+    private final JedisServiceCinema jedi = new JedisServiceCinema();
 
-    public InMemoryCinemaPersistence() {
+    public RedisCinemaPersistence() {
 
         // load stub data
         String functionDate1 = "2018-12-18 15:30";
@@ -85,6 +86,26 @@ public class InMemoryCinemaPersistence implements CinemaPersitence {
         Cinema c6 = new Cinema("CineStereo", functions6);
         Cinema c7 = new Cinema("CineColombia", functions7);
         Cinema c8 = new Cinema("CriptoCine", functions8);
+        String data = "[[true,true,true,true,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,true,true,true,true,true],[true,true,true,true,true,true,true,true,true,true,true,true]]";
+        jedi.saveToREDIS(c1.getName() + "," + funct1.getDate() + "," + funct1.getMovie().getName(), data);
+        jedi.saveToREDIS(c1.getName() + "," + funct2.getDate() + "," + funct2.getMovie().getName(), data);
+        jedi.saveToREDIS(c2.getName() + "," + funct3.getDate() + "," + funct3.getMovie().getName(), data);
+        jedi.saveToREDIS(c2.getName() + "," + funct4.getDate() + "," + funct4.getMovie().getName(), data);
+        jedi.saveToREDIS(c3.getName() + "," + funct5.getDate() + "," + funct5.getMovie().getName(), data);
+        jedi.saveToREDIS(c3.getName() + "," + funct6.getDate() + "," + funct6.getMovie().getName(), data);
+        jedi.saveToREDIS(c4.getName() + "," + funct7.getDate() + "," + funct7.getMovie().getName(), data);
+        jedi.saveToREDIS(c4.getName() + "," + funct8.getDate() + "," + funct8.getMovie().getName(), data);
+        jedi.saveToREDIS(c5.getName() + "," + funct9.getDate() + "," + funct9.getMovie().getName(), data);
+        jedi.saveToREDIS(c6.getName() + "," + funct10.getDate() + "," + funct10.getMovie().getName(), data);
+        jedi.saveToREDIS(c7.getName() + "," + funct11.getDate() + "," + funct11.getMovie().getName(), data);
+        jedi.saveToREDIS(c8.getName() + "," + funct12.getDate() + "," + funct12.getMovie().getName(), data);
+        jedi.saveToREDIS(c8.getName() + "," + funct13.getDate() + "," + funct13.getMovie().getName(), data);
+
+
+        
+
+
+
         cinemas.put("CinemaX", c1);
         cinemas.put("CinePolis", c2);
         cinemas.put("CineMania", c3);
@@ -103,7 +124,7 @@ public class InMemoryCinemaPersistence implements CinemaPersitence {
             Cinema cine = cinemas.get(cinema);
             for (CinemaFunction funcion : cine.getFunctions()) {
                 if (funcion.getDate().equals(date) && funcion.getMovie().getName().equals(movieName)) {
-                    funcion.buyTicket(row, col);
+                    jedi.buyTicketRedis(cine, funcion, col, row);
                 }
             }
         } catch (Exception e) {

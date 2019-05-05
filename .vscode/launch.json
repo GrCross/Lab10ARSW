@@ -1,0 +1,11 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "CodeLens (Launch) - MainJedis",
+            "request": "launch",
+            "mainClass": "edu.eci.arsw.cinema.main.MainJedis",
+            "projectName": "Cinema_API"
+        }
+    ]
+}
