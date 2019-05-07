@@ -80,8 +80,12 @@ public class CinemaFunction {
 		this.date = date;
 		this.seats = seats;
 		
-	}
+    }
     
+    public void setSeats(List<List<Boolean>>seats){
+        this.seats=seats;
+    }
+     
     
     
 }

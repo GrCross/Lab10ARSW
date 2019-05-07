@@ -24,7 +24,7 @@ import org.springframework.stereotype.Service;
  * @author cristian
  */
 
-@Service
+//@Service
 public class InMemoryCinemaPersistence implements CinemaPersitence {
 
     @Autowired

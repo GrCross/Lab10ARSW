@@ -44,21 +44,27 @@ public class JedisServiceCinema {
     public static boolean[][] buyTicketRedis(Cinema cinema, CinemaFunction funcion, int col, int row) {
 
         ObjectMapper mapper = new ObjectMapper();
-        String value = getFromREDIS(cinema.getName() + "," + funcion.getDate() + "," + funcion.getMovie().getName());
+        String key = cinema.getName() + funcion.getDate() + funcion.getMovie().getName();
+        String value = getFromREDIS(key);
+        
         boolean[][] seats = null;
         try {
             seats = mapper.readValue(value, boolean[][].class);
             seats[col][row]=false;
+            String jsonString = mapper.writeValueAsString(seats);
+            System.out.println("bbbbbbbbbbbbbbbbbbbbbbbbbbb "+jsonString);
+            saveToREDIS(key, jsonString);
         } catch (IOException e) {            
             e.printStackTrace();
         }
         return seats;
     }
 
-    public static boolean[][] getSeatsRedis(Cinema cinema, CinemaFunction funcion) {
+    public static boolean[][] getSeatsRedis(String cinema, CinemaFunction funcion) {
 
         ObjectMapper mapper = new ObjectMapper();
-        String value = getFromREDIS(cinema.getName() + "," + funcion.getDate() + "," + funcion.getMovie().getName());
+        String value = getFromREDIS(cinema + funcion.getDate() + funcion.getMovie().getName());
+        
         boolean[][] seats = null;
         try {
             seats = mapper.readValue(value, boolean[][].class);
